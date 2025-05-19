@@ -1,19 +1,31 @@
 import datetime
+from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 
 class MushroomBase(BaseModel):
-    pass
+    name: str = Field(..., min_length=1, max_length=100)
+    is_edible: bool = Field(..., description='True — съедобный, False — несъедобный')
+    weight: int = Field(..., gt=0, description='Вес гриба в граммах, >0')
+    is_fresh: bool = Field(True, description='True — свежий, False — несвежий')
+
+    @field_validator('name')
+    def name_not_empty(cls, value: str) -> str:
+        if value is None:
+            raise ValueError('Название не должно быть пустым')
+        return value
 
 
 class MushroomCreate(MushroomBase):
     pass
 
-
 class MushroomUpdate(MushroomBase):
-    pass
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    is_edible: Optional[bool] = None
+    weight: Optional[int] = Field(None, gt=0)
+    is_fresh: Optional[bool] = None
 
 
 class MushroomDB(MushroomBase):
@@ -21,4 +33,4 @@ class MushroomDB(MushroomBase):
     created_at: datetime.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
