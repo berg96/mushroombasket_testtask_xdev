@@ -21,5 +21,5 @@ class MushroomBasket(Base):
         ForeignKey('mushrooms.id', ondelete='CASCADE'), primary_key=True
     )
     basket_id: Mapped[UUID] = mapped_column(
-        ForeignKey('basket.id', ondelete='CASCADE'), primary_key=True
+        ForeignKey('baskets.id', ondelete='CASCADE'), primary_key=True
     )
