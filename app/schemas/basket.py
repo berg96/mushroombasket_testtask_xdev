@@ -7,19 +7,19 @@ from schemas.mushroom import MushroomDB
 
 
 class BasketBase(BaseModel):
+    pass
+
+
+class BasketCreate(BasketBase):
     owner: str = Field(..., min_length=1, max_length=100)
     capacity: int = Field(..., gt=0)
 
 
-class BasketCreate(BasketBase):
-    pass
-
-
 class BasketUpdate(BasketBase):
-    pass
+    mushroom_id: UUID = Field(...)
 
 
-class BasketDB(BasketBase):
+class BasketDB(BasketCreate):
     id: UUID
     created_at: datetime.datetime
     mushrooms: list[MushroomDB] = Field(

@@ -1,4 +1,5 @@
 from typing import TypeVar, Generic, Type, Optional, Sequence
+from uuid import UUID
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -19,7 +20,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     async def get(
             self,
-            obj_id: int,
+            obj_id: UUID,
             session: AsyncSession,
     ) -> Optional[ModelType]:
         db_obj = await session.execute(
