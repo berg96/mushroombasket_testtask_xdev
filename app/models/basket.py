@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.db import Base
@@ -12,8 +12,16 @@ class Basket(Base):
 
     mushrooms: Mapped[list['Mushroom']] = relationship(
         secondary='mushroombaskets',
-        back_populates='baskets'
+        back_populates='baskets',
+        lazy='selectin',
     )
+
+    @property
+    def total_weight(self) -> int:
+        return sum(mushroom.weight for mushroom in self.mushrooms)
+
+    def can_add(self, mushroom: 'Mushroom') -> bool:
+        return (self.total_weight + mushroom.weight) <= self.capacity
 
 
 class MushroomBasket(Base):

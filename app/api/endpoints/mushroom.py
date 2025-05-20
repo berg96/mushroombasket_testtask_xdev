@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from uuid import UUID
+
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.validators import check_mushroom_exists
 from core.db import get_async_session
 from crud.mushroom import mushroom_crud
 from schemas.mushroom import MushroomCreate, MushroomDB, MushroomUpdate
-
-from uuid import UUID
-
 
 router = APIRouter()
 
@@ -24,10 +24,7 @@ async def get_mushroom(
     mushroom_id: UUID,
     session: AsyncSession = Depends(get_async_session)
 ):
-    result = await mushroom_crud.get(mushroom_id, session)
-    if not result:
-        raise HTTPException(status_code=404, detail='Гриб не найден')
-    return result
+    return await check_mushroom_exists(mushroom_id, session)
 
 
 @router.put('/{mushroom_id}', response_model=MushroomDB)
@@ -36,7 +33,5 @@ async def update_mushroom(
     data: MushroomUpdate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    mushroom = await mushroom_crud.get(mushroom_id, session)
-    if not mushroom:
-        raise HTTPException(status_code=404, detail='Гриб не найден')
+    mushroom = await check_mushroom_exists(mushroom_id, session)
     return await mushroom_crud.update(mushroom, data, session)

@@ -22,9 +22,7 @@ class BasketUpdate(BasketBase):
 class BasketDB(BasketCreate):
     id: UUID
     created_at: datetime.datetime
-    mushrooms: list[MushroomDB] = Field(
-        default_factory=list, description='Список грибов в корзине'
-    )
+    mushrooms: list[MushroomDB] = Field(default_factory=list)
 
     class Config:
         from_attributes = True

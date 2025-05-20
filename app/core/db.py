@@ -4,11 +4,10 @@ import uuid
 from sqlalchemy import UUID, DateTime, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import (
-    declarative_base, declared_attr, Mapped, mapped_column
+    Mapped, declarative_base, declared_attr, mapped_column
 )
 
 from .config import settings
-
 
 DATABASE_URL = settings.get_db_url()
 
