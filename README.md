@@ -62,4 +62,4 @@ cd mushroombasket_testtask_xdev
 docker compose up -d
 ```
 Документация API при запущенном контейнере доступна по следующему адресу:
-[http://localhost:8000/api/docs](http://localhost:8000/api/docs)
+[http://localhost:8000/docs](http://localhost:8000/docs)
